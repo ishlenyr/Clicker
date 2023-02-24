@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+#playing-field {
+  width: 100vw;
+  height: 100vh;
+  background-image: url(levels/1.jpg);
+}

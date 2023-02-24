@@ -1,0 +1,46 @@
+.suspicion-frame {
+  position: fixed;
+  margin: 16px;
+  padding: 7px;
+
+  width: 50%;
+  min-width: 200px;
+  max-width: 600px;
+
+  border: solid 6px black;
+  background-color: #aabbbb;
+}
+
+.suspicion-bar {
+  border: solid 6px #333333;
+  padding: 11px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  background-color: #664464;
+  text-align: center;
+  position: relative;
+}
+
+.suspicion-bar-text {
+  color: white;
+
+  font-size: 24px;
+  font-family: sans-serif;
+  font-weight: bold;
+
+  position: relative;
+  z-index: 10000;
+  user-select: none;
+}
+
+#suspicionFillBar {
+  width: 0%;
+  height: 100%;
+  background-color: #995594;
+
+  position: absolute;
+  top: 0;
+
+  left: 0;
+  transition: 400ms width;
+}
