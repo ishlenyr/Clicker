@@ -8,17 +8,6 @@ const maxLevel = 3;
 const maxEnemiesOnScreen = 7;
 const maxSusLevel = 100;
 
-// function startLevel(level) {
-//   const options = {
-//     enemiesLeft: Math.floor(10 + (level > 0 ? (level * 5) / 2 : 0)),
-//     susLevel: 0,
-//   };
-//   while (enemiesLeft != 0) {
-//     setInterval(() => {});
-//   }
-//   return true;
-// }
-
 function createAmogus(level) {
   const offset = 200;
   const x = getRandomInt(offset, window.innerWidth - offset);
