@@ -173,7 +173,7 @@ playAgainButton.addEventListener("click", () => {
   setSuspicionBarFill(0);
 
   options.susLevel = 0;
-  options.enemiesLeft = Math.floor(15 + options.currentLevel * 5);
+  options.currentLevel = 1;
   options.enemiesLeft = 15;
   options.currentEnemiesCount = 0;
 
