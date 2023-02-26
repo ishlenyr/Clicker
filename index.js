@@ -3,21 +3,49 @@
 const playingField = document.getElementById("playing-field");
 
 const levelImgs = ["levels/1.jpg", "levels/2.jpg", "levels/3.jpg"];
-const amogusImgs = ["sus/red.webp", "sus/violet.webp", "sus/black.webp"];
+const amogusImgs = ["sus/red.png", "sus/violet.webp", "sus/black.webp"];
+const amogusDeathImgs = ["sus/red-dead-184x.png"];
 const maxLevel = 3;
 const maxEnemiesOnScreen = 7;
 const maxSusLevel = 100;
 
-function createAmogus(level) {
-  const offset = 200;
-  const x = getRandomInt(offset, window.innerWidth - offset);
-  const y = getRandomInt(offset, window.innerHeight - offset);
-  const elem = document.createElement("img");
-  elem.src = amogusImgs[level - 1];
-  elem.style.position = "absolute";
-  elem.style.top = `${y}px`;
-  elem.style.left = `${x}px`;
-  playingField.append(elem);
+const enemies = [];
+
+class Amogus {
+  constructor(x, y, typeIndex) {
+    this.x = x;
+    this.y = y;
+    this.elem = document.createElement("div");
+    this.elem.backgroundImage = amogusImgs[typeIndex];
+    this.elem.classList.add('amogus');
+    this.elem.style.position = "absolute";
+    this.elem.style.top = `${y}px`;
+    this.elem.style.left = `${x}px`;
+    this.elem.addEventListener("click", this.die.bind(this));
+    playingField.append(this.elem);
+  }
+  die() {
+    this.elem.classList.remove('amogus');
+    this.elem.classList.add("dead-anim");
+
+    // Корректируем разницу в размере двух картинок
+    this.x -= 19;
+    this.y += 32;
+    
+    this.elem.style.top = `${this.y}px`;
+    this.elem.style.left = `${this.x}px`;
+
+    setTimeout(() => {
+      this.elem.remove();
+    }, 3000);
+    
+    enemies.splice(enemies.indexOf(this));
+
+    options.currentEnemiesCount -= 1;
+    options.enemiesLeft -= 1;
+    options.susLevel -= options.susLevel >= 7 ? 7 : options.susLevel;
+    setSuspicionBarFill(options.susLevel);
+  }
 }
 
 // украл с MDN
@@ -33,16 +61,6 @@ const options = {
   currentLevel: 1,
   currentEnemiesCount: 0,
 };
-
-playingField.addEventListener("click", (e) => {
-  if (e.target.tagName !== "IMG") return;
-
-  options.currentEnemiesCount -= 1;
-  options.enemiesLeft -= 1;
-  options.susLevel -= options.susLevel >= 7 ? 7 : options.susLevel;
-  setSuspicionBarFill(options.susLevel);
-  e.target.remove();
-});
 
 const intervalId = setInterval(() => {
   if (options.susLevel >= maxSusLevel) {
@@ -62,9 +80,8 @@ const intervalId = setInterval(() => {
 
     options.susLevel = 0;
     options.enemiesLeft = Math.floor(15 + options.currentLevel * 5);
-    playingField.style.backgroundImage = `url(${
-      levelImgs[options.currentLevel - 1]
-    })`;
+    playingField.style.backgroundImage = `url(${levelImgs[options.currentLevel - 1]
+      })`;
     setSuspicionBarFill(0);
   }
 
@@ -72,7 +89,10 @@ const intervalId = setInterval(() => {
     options.currentEnemiesCount < maxEnemiesOnScreen &&
     options.enemiesLeft > 0
   ) {
-    createAmogus(options.currentLevel);
+    const offset = 200;
+    const x = getRandomInt(offset, window.innerWidth - offset);
+    const y = getRandomInt(offset, window.innerHeight - offset);
+    enemies.push(new Amogus(x, y, options.currentLevel - 1));
     options.currentEnemiesCount++;
   }
 

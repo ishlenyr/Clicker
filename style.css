@@ -13,3 +13,34 @@ body {
   height: 100vh;
   background-image: url(levels/1.jpg);
 }
+
+.amogus {
+  z-index: 2;
+  width: 165px;
+  height: 211px;
+  background-image: url('sus/red.png');
+}
+
+.dead-anim {
+  z-index: 1;
+  background-image: url('sus/red-dead-184x.png');
+  width: 184px;
+  height: 179px;
+  animation: death-anim 1.7s steps(41) forwards, dissapear-anim 1s 1.7s forwards;
+}
+
+@keyframes death-anim {
+  to {
+    background-position: -7544px;
+  }
+}
+
+.dead-disappear {
+  animation: dissapear-anim 1.7s 1s forwards;
+}
+
+@keyframes dissapear-anim {
+  to {
+    opacity: 0;
+  }
+}
