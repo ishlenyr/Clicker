@@ -1,0 +1,83 @@
+.angrysus-group {
+    width: 400px;
+}
+
+.dialog {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10000;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: collapse;
+    
+    transition: 1s visibility, background-color 1s;
+}
+
+.dialog-show {
+    visibility:visible;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.dialog-frame {
+    border-radius: 6px;
+    border:  solid 6px black;
+    background-color: #aabbbb;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    padding: 32px;
+
+    transform: translateY(-100%);
+    opacity: 0;
+
+    transition: 1s;
+}
+
+.dialog-frame-show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.dialog-buttons-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.dialog-text {
+    font-size: 64px;
+    font-family: sans-serif;
+    font-weight: bold;
+    -webkit-text-stroke: 1.5px white; 
+}
+
+.button {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    
+    width: 128px;
+    height: 128px;
+
+    background-size: contain;
+}
+
+.button:hover {
+    filter: brightness(0.9);
+}
+
+.button:active {
+    transform: scale(0.9);
+}
+
+.play-again-button {
+    background-image: url('../images/button-playagain.png');
+}
+
+.quit-button {
+    background-image: url('../images/button-quit.png');
+}

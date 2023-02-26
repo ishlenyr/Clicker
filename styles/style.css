@@ -11,19 +11,19 @@ body {
 #playing-field {
   width: 100vw;
   height: 100vh;
-  background-image: url(levels/1.jpg);
+  background-image: url('../levels/1.jpg');
 }
 
 .amogus {
   z-index: 2;
   width: 165px;
   height: 211px;
-  background-image: url('sus/red.png');
+  background-image: url('../images/red.png');
 }
 
 .dead-anim {
   z-index: 1;
-  background-image: url('sus/red-dead-184x.png');
+  background-image: url('../images/red-dead-184x.png');
   width: 184px;
   height: 179px;
   animation: death-anim 1.7s steps(41) forwards, dissapear-anim 1s 1.7s forwards;

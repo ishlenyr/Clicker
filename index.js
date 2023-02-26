@@ -9,7 +9,19 @@ const maxLevel = 3;
 const maxEnemiesOnScreen = 7;
 const maxSusLevel = 100;
 
-const enemies = [];
+const enemies = {
+  collection: new Array(),
+  clear() {
+    this.collection = new Array();
+    playingField.innerHTML = "";
+  },
+  add(enemy) {
+    this.collection.push(enemy);
+  },
+  remove(enemy) {
+    this.collection.splice(this.collection.indexOf(enemy));
+  },
+};
 
 class Amogus {
   constructor(x, y, typeIndex) {
@@ -39,7 +51,7 @@ class Amogus {
       this.elem.remove();
     }, 3000);
     
-    enemies.splice(enemies.indexOf(this));
+    enemies.remove(this);
 
     options.currentEnemiesCount -= 1;
     options.enemiesLeft -= 1;
@@ -62,41 +74,65 @@ const options = {
   currentEnemiesCount: 0,
 };
 
-const intervalId = setInterval(() => {
-  if (options.susLevel >= maxSusLevel) {
-    // TODO: show fail screen
-    clearInterval(intervalId);
-    return;
-  }
+playAgainButton.addEventListener("click", () => {
+  enemies.clear();
+  setSuspicionBarFill(0);
 
-  if (options.enemiesLeft <= 0) {
-    options.currentLevel += 1;
+  options.susLevel = 0;
+  options.enemiesLeft = Math.floor(15 + options.currentLevel * 5);
+  options.enemiesLeft = 15;
+  options.currentEnemiesCount = 0;
 
-    if (options.currentLevel > 3) {
-      // TODO: show success screen?
+  playingField.style.backgroundImage = `url(${levelImgs[options.currentLevel - 1]})`;
+
+  gameOverDialog.classList.remove('dialog-show');
+  gameOverDialog.getElementsByClassName('dialog-frame')[0].classList.remove('dialog-frame-show');
+
+  startGame();
+});
+
+function startGame() {
+  const intervalId = setInterval(() => {
+    
+    if (options.enemiesLeft <= 0) {
+      options.currentLevel += 1;
+  
+      if (options.currentLevel > 3) {
+        options.currentLevel = 0;
+        clearInterval(intervalId);
+        return;
+      }
+  
+      options.susLevel = 0;
+      options.enemiesLeft = Math.floor(15 + options.currentLevel * 5);
+      playingField.style.backgroundImage = `url(${levelImgs[options.currentLevel - 1]
+        })`;
+      setSuspicionBarFill(0);
+    }
+  
+    if (
+      options.currentEnemiesCount < maxEnemiesOnScreen &&
+      options.enemiesLeft > 0
+    ) {
+      const offset = 200;
+      const x = getRandomInt(offset, window.innerWidth - offset);
+      const y = getRandomInt(offset, window.innerHeight - offset);
+      enemies.add(new Amogus(x, y, options.currentLevel - 1));
+      options.currentEnemiesCount++;
+    }
+  
+    options.susLevel +=
+      options.currentEnemiesCount * 2.5 + options.currentLevel * 2;
+    setSuspicionBarFill(options.susLevel);
+
+    if (options.susLevel >= maxSusLevel) {
+      // TODO: show fail screen
+      gameOverDialog.classList.add('dialog-show');
+      gameOverDialog.getElementsByClassName('dialog-frame')[0].classList.add('dialog-frame-show');
       clearInterval(intervalId);
       return;
     }
+  }, 1000);
+}
 
-    options.susLevel = 0;
-    options.enemiesLeft = Math.floor(15 + options.currentLevel * 5);
-    playingField.style.backgroundImage = `url(${levelImgs[options.currentLevel - 1]
-      })`;
-    setSuspicionBarFill(0);
-  }
-
-  if (
-    options.currentEnemiesCount < maxEnemiesOnScreen &&
-    options.enemiesLeft > 0
-  ) {
-    const offset = 200;
-    const x = getRandomInt(offset, window.innerWidth - offset);
-    const y = getRandomInt(offset, window.innerHeight - offset);
-    enemies.push(new Amogus(x, y, options.currentLevel - 1));
-    options.currentEnemiesCount++;
-  }
-
-  options.susLevel +=
-    options.currentEnemiesCount * 2.5 + options.currentLevel * 2;
-  setSuspicionBarFill(options.susLevel);
-}, 1000);
+startGame();

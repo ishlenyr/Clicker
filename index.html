@@ -4,18 +4,33 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="bars.css" />
+    <link rel="stylesheet" href="styles/style.css" />
+    <link rel="stylesheet" href="styles/bars.css" />
+    <link rel="stylesheet" href="styles/dialogs.css" />
     <title>Amogus Clicker</title>
   </head>
   <body>
+
+    <div id="gameOverDialog" class="dialog">
+      <div class="dialog-frame">
+        <span class="dialog-text">GAME OVER</span>
+        <img class="angrysus-group" src="images/angrysus-group.png">
+        <div class="dialog-buttons-container">
+          <button id="playAgainButton" class="button play-again-button"></button>
+          <button id="quitButton" class="button quit-button"></button>
+        </div>
+      </div>
+    </div>
+
     <div class="suspicion-frame">
       <div class="suspicion-bar">
         <div id="suspicionFillBar"></div>
         <span class="suspicion-bar-text">SUSPICION</span>
       </div>
     </div>
+
     <div id="playing-field"></div>
+
     <script src="bars.js"></script>
     <script src="index.js"></script>
   </body>
