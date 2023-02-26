@@ -3,8 +3,8 @@
 const playingField = document.getElementById("playing-field");
 
 const levelImgs = ["levels/1.jpg", "levels/2.jpg", "levels/3.jpg"];
-const amogusImgs = ["sus/red.png", "sus/violet.webp", "sus/black.webp"];
-const amogusDeathImgs = ["sus/red-dead-184x.png"];
+const amogusImgs = ["images/red.png", "images/green.png", "images/blue.png"];
+const amogusDeathImgs = ["images/red-dead-184x.png", "images/green-dead-184x.png", "images/blue-dead-184x.png"];
 const maxLevel = 3;
 const maxEnemiesOnScreen = 7;
 const maxSusLevel = 100;
@@ -27,18 +27,25 @@ class Amogus {
   constructor(x, y, typeIndex) {
     this.x = x;
     this.y = y;
+    this.typeIndex = typeIndex;
     this.elem = document.createElement("div");
-    this.elem.backgroundImage = amogusImgs[typeIndex];
+    this.elem.style.backgroundImage = `url('${amogusImgs[typeIndex]}')`;
     this.elem.classList.add('amogus');
     this.elem.style.position = "absolute";
     this.elem.style.top = `${y}px`;
     this.elem.style.left = `${x}px`;
-    this.elem.addEventListener("click", this.die.bind(this));
+    this.elem.onclick = this.die.bind(this);
     playingField.append(this.elem);
   }
   die() {
     this.elem.classList.remove('amogus');
+    this.elem.style.backgroundImage = `url('${amogusDeathImgs[this.typeIndex]}')`;
     this.elem.classList.add("dead-anim");
+    
+    
+    const audio = new Audio("sounds/kill.wav");
+    audio.volume = 0.3;
+    audio.play();
 
     // Корректируем разницу в размере двух картинок
     this.x -= 19;
@@ -52,6 +59,7 @@ class Amogus {
     }, 3000);
     
     enemies.remove(this);
+    this.elem.onclick = null;
 
     options.currentEnemiesCount -= 1;
     options.enemiesLeft -= 1;
@@ -98,9 +106,7 @@ function startGame() {
       options.currentLevel += 1;
   
       if (options.currentLevel > 3) {
-        options.currentLevel = 0;
-        clearInterval(intervalId);
-        return;
+        options.currentLevel = 1;
       }
   
       options.susLevel = 0;
@@ -118,6 +124,11 @@ function startGame() {
       const x = getRandomInt(offset, window.innerWidth - offset);
       const y = getRandomInt(offset, window.innerHeight - offset);
       enemies.add(new Amogus(x, y, options.currentLevel - 1));
+
+      const audio = new Audio("sounds/popup.wav");
+      audio.volume = 0.2;
+      audio.play();
+
       options.currentEnemiesCount++;
     }
   
@@ -126,9 +137,14 @@ function startGame() {
     setSuspicionBarFill(options.susLevel);
 
     if (options.susLevel >= maxSusLevel) {
-      // TODO: show fail screen
+      // show fail screen
       gameOverDialog.classList.add('dialog-show');
       gameOverDialog.getElementsByClassName('dialog-frame')[0].classList.add('dialog-frame-show');
+
+      const audio = new Audio("sounds/abobus.mp3");
+      audio.volume = 0.2;
+      audio.play();
+
       clearInterval(intervalId);
       return;
     }
